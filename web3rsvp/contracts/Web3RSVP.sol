@@ -5,7 +5,6 @@ pragma solidity ^0.8.9;
 contract Web3RSVP{
 
 
-//event declaration
 
 event NewEventCreated(
     bytes32 eventID,
@@ -21,6 +20,7 @@ event NewRSVP(bytes32 eventID, address attendeeAddress);
 event ConfirmedAttendee(bytes32 eventID, address attendeeAddress);
 
 event DepositsPaidOut(bytes32 eventID);
+
 
 
 
@@ -68,6 +68,17 @@ function createNewEvent(
         claimedRSVPs,
         false
     );
+
+emit NewEventCreated(
+    eventId,
+    msg.sender,
+    eventTimeStamp,
+    maxCapacity,
+    deposit,
+    eventDataCID
+);
+
+
 }
 
 //fucntion to create rsvp
@@ -92,6 +103,9 @@ function createNewRSVP (bytes32 eventId) external payable {
     }
 
     myEvent.confirmedRSVPs.push(payable(msg.sender));
+
+
+    emit NewRSVP(eventId, msg.sender);
 }
 
 
@@ -134,6 +148,9 @@ function confirmAttendee(bytes32 eventId, address attendee) public {
     }
 
     require(sent, "Failed to send Ether");
+
+
+    emit ConfirmedAttendee(eventId, attendee);
 }
 
 //confirm as a whole group 
@@ -160,7 +177,7 @@ function withdrawUnclaimedDeposits(bytes32 eventId) external {
 
     // check if it's been 7 days past myEvent.eventTimestamp
     require(
-        block.timestamp >= (myEvent.eventTimestamp + 7 days),
+        block.timestamp >= (myEvent.eventTimeStamp + 7 days),
         "TOO EARLY"
     );
 
@@ -184,6 +201,8 @@ function withdrawUnclaimedDeposits(bytes32 eventId) external {
     }
 
     require(sent, "Failed to send Ether");
+
+    emit DepositsPaidOut(eventId);
 
 }
 
