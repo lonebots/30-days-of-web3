@@ -12,7 +12,8 @@
   "devDependencies": {
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "ethereum-waffle": "^3.4.4",
-    "hardhat": "^2.10.1"
+    "hardhat": "^2.10.1",
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
     "dotenv": "^16.0.1"
